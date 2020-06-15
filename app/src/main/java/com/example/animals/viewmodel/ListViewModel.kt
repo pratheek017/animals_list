@@ -19,7 +19,7 @@ import com.example.animals.model.Animal
 class ListViewModel(application: Application): AndroidViewModel(application) {
 
     /**
-     * The live variable that hold the animal values.
+     * The live variable that holds the animal values.
      * This live variable is is the live data observed by the view.
      * JFKI: MutableLiveData<List<Animal>>() is the type for animals variable.
      */

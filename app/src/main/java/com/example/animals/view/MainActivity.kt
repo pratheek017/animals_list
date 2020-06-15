@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         // System goes to R.id.fragment. Then it checks the inner view(s) in animal_nav because
         // animal_nav is the navGraph of R.id.fragment and adds the back button in that
         // inner view(s).
-        navController = Navigation.findNavController(this, R.id.mainFragment)
+        navController = Navigation.findNavController(this, R.id.fragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
