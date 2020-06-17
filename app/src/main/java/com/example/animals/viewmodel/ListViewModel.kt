@@ -56,6 +56,7 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
      * which results in updating LiveData in turn updating the UI
      */
     fun refresh(){
+        loading.value = true
         getKey()
     }
 
@@ -70,9 +71,9 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
                     // Calls the get on a new thread so that the main thread is not
                     // strangled with the data retrieval from the back-end server
                 .subscribeOn(Schedulers.newThread())
-                    // Data received from the back-end server is recevied by the main thread
+                    // Data received from the back-end server is received by the main thread
                 .observeOn(AndroidSchedulers.mainThread())
-                    //Receiving a disposable Single observer as the return type
+                    //Receiving a disposable Single observer because the return type
                     // in the AnimalApi is Single
                 .subscribeWith(object: DisposableSingleObserver<ApiKey>(){
                     override fun onSuccess(keyreceived: ApiKey) {

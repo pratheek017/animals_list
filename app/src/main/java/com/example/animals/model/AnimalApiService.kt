@@ -23,7 +23,7 @@ class AnimalApiService {
      * Animal() and ApiKey() in this case
      *
      * addCallAdapterFactory - The RxJava2CallAdapterFactory converts objects coming from
-     * GsonConverterFactory into Singleton observables based on the the observable type
+     * GsonConverterFactory into observable Singletons based on the the observable type
      * we have mentioned, Single(check AnimalApi.kt) in our case
      *
      * This retrofit api is created with respect to AnimalApi class
