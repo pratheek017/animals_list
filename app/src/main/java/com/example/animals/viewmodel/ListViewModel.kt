@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.animals.model.Animal
 import com.example.animals.model.AnimalApiService
 import com.example.animals.model.ApiKey
+import com.example.animals.util.SharedPreferencesHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -52,10 +53,36 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
     private val apiService = AnimalApiService()
 
     /**
+     * Our shared preferences utility
+     */
+    private val prefs = SharedPreferencesHelper(getApplication())
+
+    /**
+     * A boolean flag that tells whether the key received is invalid or not
+     */
+    private var isInvalidApiKey = false
+
+    /**
      * This is called to refresh the data. It calls the retrofit API to retrieve data
      * which results in updating LiveData in turn updating the UI
      */
     fun refresh(){
+        loading.value = true
+
+        val key = prefs.getApiKey()
+        isInvalidApiKey = false
+
+        if (key.isNullOrEmpty())
+            getKey()
+        else
+            getAnimals(key)
+    }
+
+    /**
+     * This refresh method actually gets the key every single time. Intention is to call this
+     * evey time the user manually scrolls and refreshes the layout
+     */
+    fun hardRefresh(){
         loading.value = true
         getKey()
     }
@@ -81,6 +108,7 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
                             loadError.value = true
                             loading.value = false
                         } else{
+                            prefs.saveApiKey(keyreceived.key)
                             getAnimals(keyreceived.key)
                         }
                     }
@@ -110,10 +138,20 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
                     }
 
                     override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        loadError.value = true
-                        loading.value = false
-                        animals.value = null
+
+                        // This can happen if the key is changed in the backend server, but
+                        // our shared preferences still has the old key. That's why we again
+                        // call getKey() here which fetches the key again from the backend server
+                        // and updates the shared preferences.
+                        if (!isInvalidApiKey){
+                            isInvalidApiKey = true
+                            getKey()
+                        } else{
+                            e.printStackTrace()
+                            loadError.value = true
+                            loading.value = false
+                            animals.value = null
+                        }
                     }
                 })
         )

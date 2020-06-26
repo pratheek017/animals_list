@@ -10,7 +10,7 @@ import com.example.animals.R
 /**
  * This Util is a utility class. Similar to a static class in Java (I'm guessing).
  * This does not require any class declaration. Functions can directly be declared.
- * Other classes can use them directly with the function name.
+ * Other classes can use them directly with the function name like a static class in Java.
  * All that's required is this package to be imported.
  */
 
@@ -28,7 +28,8 @@ fun getProgressDrawable(context: Context): CircularProgressDrawable{
 }
 
 /**
- * Loads the image from a uri and sets it to the image view, i.e the context in this case
+ * Loads the image from a uri and sets it to the image view, i.e the context in this case.
+ * loadImage is an extension function of the ImageView class
  */
 fun ImageView.loadImage(uri: String?, circularProgressDrawable: CircularProgressDrawable){
     val options = RequestOptions()

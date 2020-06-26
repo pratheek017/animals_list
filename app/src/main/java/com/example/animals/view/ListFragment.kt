@@ -77,9 +77,9 @@ class ListFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
 
         // This is what tells the local observer objects to start observing the live data.
-        viewModel.animals.observe(this, animalsListDataObserver)
-        viewModel.loading.observe(this, loadingLiveDataObserver)
-        viewModel.loadError.observe(this, errorLiveDataObserver)
+        viewModel.animals.observe(viewLifecycleOwner, animalsListDataObserver)
+        viewModel.loading.observe(viewLifecycleOwner, loadingLiveDataObserver)
+        viewModel.loadError.observe(viewLifecycleOwner, errorLiveDataObserver)
         viewModel.refresh()
 
         // This animalList is the ID of the recycler view in the fragment_list xml layout file.
@@ -93,7 +93,7 @@ class ListFragment : Fragment() {
             animalList.visibility = View.GONE
             listError.visibility = View.GONE
             loadingView.visibility = View.VISIBLE
-            viewModel.refresh()
+            viewModel.hardRefresh()
 
             // This is to remove the default spinner that recycler view shows
             refreshLayout.isRefreshing = false
